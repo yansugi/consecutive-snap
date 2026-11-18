@@ -1,0 +1,194 @@
+<Window x:Class="ConsecutiveSnap.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ConsecutiveSnap"
+        Icon="Assets/AppIcon.ico"
+        Style="{StaticResource WindowStyle}"
+        Width="660" SizeToContent="Height"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="22,14,22,16">
+
+            <!-- ヘッダー -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                <Image Source="Assets/AppIcon.png" Width="48" Height="48" RenderOptions.BitmapScalingMode="HighQuality"/>
+                <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="ConsecutiveSnap" FontSize="22" FontWeight="Bold"/>
+                    <TextBlock Text="同じ範囲を、ページをめくりながら連続で撮影" Style="{StaticResource Hint}" Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- 設定ファイルの読み込み時などの通知 -->
+            <Border x:Name="WarningBorder" Visibility="Collapsed" Background="#FFF4D6" BorderBrush="#F2D98A"
+                    BorderThickness="1" Padding="12,8" Margin="0,0,0,12" CornerRadius="10">
+                <TextBlock x:Name="WarningText" TextWrapping="Wrap" Foreground="#7A5200"/>
+            </Border>
+
+            <StackPanel x:Name="InputPanel">
+
+                <!-- 1. 撮影範囲 -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Border Style="{StaticResource NumberBadge}">
+                                <TextBlock Text="1" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="撮影範囲" Style="{StaticResource SectionTitle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                            <Button x:Name="SelectRegionButton" Content="範囲を指定..." Click="SelectRegionButton_Click"/>
+                            <TextBlock x:Name="RegionText" VerticalAlignment="Center" Margin="14,0,0,0" Foreground="{StaticResource SubTextBrush}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 2. 操作シーケンス -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Border Style="{StaticResource NumberBadge}">
+                                <TextBlock Text="2" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="操作シーケンス" Style="{StaticResource SectionTitle}"/>
+                            <TextBlock Text="撮影の合間に上から順に実行" Style="{StaticResource Hint}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ListBox x:Name="StepList" Height="112" MouseDoubleClick="StepList_MouseDoubleClick">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border x:Name="Pill" CornerRadius="10" Padding="9,2" MinWidth="70" Margin="0,0,12,0" Background="#E8EAF0">
+                                                <TextBlock Text="{Binding Kind}" FontSize="11.5" FontWeight="SemiBold"
+                                                           Foreground="#3F435A" HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding Detail}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Kind}" Value="キー">
+                                                <Setter TargetName="Pill" Property="Background" Value="#E4E1FF"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Kind}" Value="クリック">
+                                                <Setter TargetName="Pill" Property="Background" Value="#D9F2E6"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Kind}" Value="ホイール">
+                                                <Setter TargetName="Pill" Property="Background" Value="#FFE8C7"/>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                <Button Content="追加..." Style="{StaticResource SmallButton}" Click="AddStepButton_Click"/>
+                                <Button Content="編集..." Style="{StaticResource SmallButton}" Click="EditStepButton_Click"/>
+                                <Button Content="削除" Style="{StaticResource SmallButton}" Click="DeleteStepButton_Click"/>
+                                <UniformGrid Columns="2">
+                                    <Button Content="↑" Style="{StaticResource SmallButton}" MinWidth="0" Margin="0,0,3,0" Click="MoveUpButton_Click"/>
+                                    <Button Content="↓" Style="{StaticResource SmallButton}" MinWidth="0" Margin="3,0,0,0" Click="MoveDownButton_Click"/>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                            <TextBlock Text="操作後の待機" VerticalAlignment="Center"/>
+                            <TextBox x:Name="AfterWaitBox" Width="72" Margin="10,0,6,0" TextAlignment="Right"/>
+                            <TextBlock Text="ミリ秒（ページ描画待ち）" VerticalAlignment="Center" Foreground="{StaticResource SubTextBrush}"/>
+                        </StackPanel>
+                        <CheckBox x:Name="RestoreCursorCheck" Content="クリック・ホイールの後にカーソルを元の位置へ戻す" Margin="0,10,0,0"/>
+                        <TextBlock Text="ステップが空でも実行できます（撮影のみを繰り返します）。最後の撮影のあとには操作しません。"
+                                   Style="{StaticResource Hint}" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 3. 実行条件 -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Border Style="{StaticResource NumberBadge}">
+                                <TextBlock Text="3" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="実行条件" Style="{StaticResource SectionTitle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                            <TextBlock Text="繰り返し回数" VerticalAlignment="Center"/>
+                            <TextBox x:Name="RepeatBox" Width="72" Margin="10,0,28,0" TextAlignment="Right" TextChanged="RepeatOrNameChanged"/>
+                            <TextBlock Text="開始前の待機" VerticalAlignment="Center"/>
+                            <TextBox x:Name="StartDelayBox" Width="56" Margin="10,0,6,0" TextAlignment="Right"/>
+                            <TextBlock Text="秒" VerticalAlignment="Center"/>
+                            <TextBlock Text="この間に対象アプリへフォーカス" Style="{StaticResource Hint}"
+                                       VerticalAlignment="Center" Margin="12,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 4. 保存先 -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Border Style="{StaticResource NumberBadge}">
+                                <TextBlock Text="4" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="保存先" Style="{StaticResource SectionTitle}"/>
+                        </StackPanel>
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="86"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="親フォルダ" VerticalAlignment="Center"/>
+                            <TextBox x:Name="ParentBox" Grid.Column="1" TextChanged="RepeatOrNameChanged"/>
+                            <Button Grid.Column="2" Content="参照..." Margin="8,0,0,0" Click="BrowseButton_Click"/>
+                            <TextBlock Grid.Row="1" Text="フォルダ名" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                            <TextBox x:Name="FolderNameBox" Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" TextChanged="RepeatOrNameChanged"/>
+                        </Grid>
+                        <TextBlock x:Name="FileNamePreview" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                        <TextBlock x:Name="FolderError" Style="{StaticResource ErrorText}" Margin="0,2,0,0"/>
+                        <TextBlock Text="同名のフォルダが既にある場合は、MyBook_2 のように別名で新規作成します（既存フォルダには書き込みません）。"
+                                   Style="{StaticResource Hint}" Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- 実行 -->
+            <Grid Margin="0,4,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="StartButton" Content="開始" Style="{StaticResource PrimaryButton}" Width="130" Padding="0,10"
+                        FontSize="15" Click="StartButton_Click"/>
+                <Button x:Name="StopButton" Grid.Column="1" Content="停止" Style="{StaticResource DangerButton}" Width="90" Padding="0,10"
+                        Margin="10,0,0,0" FontSize="15" IsEnabled="False" Click="StopButton_Click"/>
+                <Border Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Background="#FDECEC"
+                        CornerRadius="14" Padding="12,5"
+                        ToolTip="ノートPCでは Fn キーとの組み合わせで Pause/Break を押す場合があります。">
+                    <TextBlock FontSize="12" Foreground="#B4343A">
+                        <Run Text="緊急停止" FontWeight="Bold"/><Run Text="  Pause/Break キー"/>
+                    </TextBlock>
+                </Border>
+            </Grid>
+
+            <!-- 結果 -->
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock x:Name="ResultText" TextWrapping="Wrap" Text="準備ができたら「開始」を押してください。" Foreground="{StaticResource SubTextBrush}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <Button x:Name="OpenFolderButton" Content="保存フォルダを開く" Visibility="Collapsed" Margin="0,0,8,0" Click="OpenFolderButton_Click"/>
+                        <Button x:Name="OpenLogButton" Content="ログフォルダを開く" Click="OpenLogButton_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

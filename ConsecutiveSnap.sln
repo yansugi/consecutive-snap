@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9A59544F-A9FA-4252-8773-BCA5CC41BB7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsecutiveSnap.Core", "src\ConsecutiveSnap.Core\ConsecutiveSnap.Core.csproj", "{FB53CFB2-9981-4879-8AA3-AD2BBFFF5512}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{113B3043-4DE9-485E-A443-430FE37FE97A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsecutiveSnap.Core.Tests", "tests\ConsecutiveSnap.Core.Tests\ConsecutiveSnap.Core.Tests.csproj", "{3C00B7D1-32F7-44C0-8905-DB07E746E153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsecutiveSnap.App", "src\ConsecutiveSnap.App\ConsecutiveSnap.App.csproj", "{C196CC56-2F93-42E1-94CD-E0D9A4AE188A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB53CFB2-9981-4879-8AA3-AD2BBFFF5512}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB53CFB2-9981-4879-8AA3-AD2BBFFF5512}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB53CFB2-9981-4879-8AA3-AD2BBFFF5512}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB53CFB2-9981-4879-8AA3-AD2BBFFF5512}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C00B7D1-32F7-44C0-8905-DB07E746E153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C00B7D1-32F7-44C0-8905-DB07E746E153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C00B7D1-32F7-44C0-8905-DB07E746E153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C00B7D1-32F7-44C0-8905-DB07E746E153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C196CC56-2F93-42E1-94CD-E0D9A4AE188A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C196CC56-2F93-42E1-94CD-E0D9A4AE188A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C196CC56-2F93-42E1-94CD-E0D9A4AE188A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C196CC56-2F93-42E1-94CD-E0D9A4AE188A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FB53CFB2-9981-4879-8AA3-AD2BBFFF5512} = {9A59544F-A9FA-4252-8773-BCA5CC41BB7D}
+		{3C00B7D1-32F7-44C0-8905-DB07E746E153} = {113B3043-4DE9-485E-A443-430FE37FE97A}
+		{C196CC56-2F93-42E1-94CD-E0D9A4AE188A} = {9A59544F-A9FA-4252-8773-BCA5CC41BB7D}
+	EndGlobalSection
+EndGlobal

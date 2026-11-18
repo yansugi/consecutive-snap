@@ -1,0 +1,19 @@
+# ビルド成果物
+bin/
+obj/
+dist/
+
+# IDE・ユーザー固有ファイル
+.vs/
+.vscode/
+*.user
+*.suo
+
+# テスト結果・カバレッジ
+TestResults/
+*.trx
+coverage/
+
+# OS が作る一時ファイル
+Thumbs.db
+.DS_Store

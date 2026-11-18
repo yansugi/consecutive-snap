@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- System.Drawing（Bitmap等）を、NuGetパッケージではなく.NET標準のWindowsDesktopフレームワーク参照で
+         使うための指定。製品側にNuGet依存を持ち込まないための意図的な設定。 -->
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <!-- UseWindowsFormsで追加される暗黙usingは、WPF側の同名クラスと衝突するため外す。必要な箇所で明示的にusingする。 -->
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
+
+</Project>

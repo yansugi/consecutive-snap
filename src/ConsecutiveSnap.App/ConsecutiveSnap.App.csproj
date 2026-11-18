@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <!-- NativeWindow（緊急停止ホットキーの受信）と Screen.AllScreens のために参照する。 -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
+    <AssemblyName>ConsecutiveSnap</AssemblyName>
+    <RootNamespace>ConsecutiveSnap.App</RootNamespace>
+    <!-- WFAC010: WinFormsの高DPI設定に関する警告。本アプリはWPFで、PerMonitorV2はmanifestで宣言するのが
+         正しい方法（SnipSnapと同じ）。WinFormsはNativeWindow/Screenのためだけに参照しているので抑制する。 -->
+    <NoWarn>$(NoWarn);WFAC010</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConsecutiveSnap.Core\ConsecutiveSnap.Core.csproj" />
+  </ItemGroup>
+
+  <!-- アイコン。AppIcon.icoはexeのアイコンとウィンドウのタイトルバー用、AppIcon.pngは画面内のロゴ表示用。 -->
+  <ItemGroup>
+    <Resource Include="Assets\AppIcon.ico" />
+    <Resource Include="Assets\AppIcon.png" />
+  </ItemGroup>
+
+  <!-- UseWindowsFormsを有効にすると、System.Windows.Forms/System.Drawingの暗黙usingが追加され、
+       WPF側の同名クラス（Point/Brush/Rectangle/TextBox等）と衝突するため無効化する。
+       必要な箇所では別名（using alias）で明示的に参照する。 -->
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
+
+</Project>
